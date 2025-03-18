@@ -43,7 +43,7 @@ class DrSpaamROS(Node):
         """
         @brief      Reads parameters from ROS server.
         """
-        self.declare_parameter("weight_file", "/home/user1/CONVINCE/ros2_person_det_ws/weights/ckpt_jrdb_ann_dr_spaam_e20.pth")
+        self.declare_parameter("weight_file", "/home/morpheus/code/2d_lidar_people_tracker/detectors_ros/checkpoints/ckpt_jrdb_ann_dr_spaam_e20.pth")
         self.declare_parameter("conf_thresh", 0.8)
         self.declare_parameter("stride", 2)
         self.declare_parameter("detector_model", "DR-SPAAM")

@@ -47,17 +47,17 @@ RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> /home/${USER}/.bashrc
 
 # Install pip and system dependencies
 RUN sudo apt update && sudo apt install -y python3-pip
-RUN pip3 install torch torchvision
+# RUN pip3 install torch torchvision
 
 # Git Setup
-ARG GIT_USERNAME
-ARG GIT_USER_EMAIL
-ARG GIT_TOKEN
-RUN git config --global user.name ${GIT_USERNAME} && git config --global user.email ${GIT_USER_EMAIL}
-# Installing repository and pip dependencies
-RUN cd && mkdir -p $HOME/ros2_ws/src && cd $HOME/ros2_ws/src git clone https://${GIT_TOKEN}@github.com/morpheus1820/2d_lidar_people_tracker
-RUN pip3 install -r 2d_lidar_people_tracker/requirements.txt
-RUN cd $HOME/ros2_ws && colcon build && source install/setup.bash
+# ARG GIT_USERNAME
+# ARG GIT_USER_EMAIL
+# ARG GIT_TOKEN
+# RUN git config --global user.name ${GIT_USERNAME} && git config --global user.email ${GIT_USER_EMAIL}
+# # Installing repository and pip dependencies
+# RUN cd && mkdir -p $HOME/ros2_ws/src && cd $HOME/ros2_ws/src git clone https://${GIT_TOKEN}@github.com/morpheus1820/2d_lidar_people_tracker
+# RUN pip3 install -r 2d_lidar_people_tracker/requirements.txt
+# RUN cd $HOME/ros2_ws && colcon build && source install/setup.bash
 # 
 # # Manually install requirements - we don't need all the requirements
 # RUN sudo apt update && sudo apt install python3-opencv python3-shapely -y
@@ -99,6 +99,7 @@ RUN cd $HOME/ros2_ws && colcon build && source install/setup.bash
 #     wget https://huggingface.co/openai/clip-vit-base-patch32/resolve/main/tokenizer.json && \
 #     wget https://huggingface.co/openai/clip-vit-base-patch32/resolve/main/special_tokens_map.json
 
+RUN echo "source /home/user1/ros2_ws/install/setup.bash" >> /home/${USER}/.bashrc
 
 # Cleanup
 RUN sudo apt update && sudo apt install -y iproute2 unzip terminator bash-completion gedit mlocate && sudo apt clean && sudo rm -rf /var/lib/apt/lists/* && sudo updatedb
