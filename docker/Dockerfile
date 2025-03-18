@@ -38,7 +38,7 @@ RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/r
 
 RUN sudo apt update && sudo apt install ros-$ROS_DISTRO-ros-base \
     ros-$ROS_DISTRO-sensor-msgs ros-$ROS_DISTRO-geometry-msgs \
-    ros-$ROS_DISTRO-cv-bridge ros-dev-tools -y
+    ros-$ROS_DISTRO-cv-bridge ros-$ROS_DISTRO-nav2-common ros-dev-tools -y
 
 RUN sudo apt update && sudo apt install ros-$ROS_DISTRO-rmw-cyclonedds-cpp -y
 ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
@@ -100,6 +100,7 @@ RUN sudo apt update && sudo apt install -y python3-pip
 #     wget https://huggingface.co/openai/clip-vit-base-patch32/resolve/main/special_tokens_map.json
 
 RUN echo "source /home/user1/ros2_ws/install/setup.bash" >> /home/${USER}/.bashrc
+RUN echo "export ROS_DOMAIN_ID=0" >> /home/${USER}/.bashrc
 
 # Cleanup
 RUN sudo apt update && sudo apt install -y iproute2 unzip terminator bash-completion gedit mlocate && sudo apt clean && sudo rm -rf /var/lib/apt/lists/* && sudo updatedb
