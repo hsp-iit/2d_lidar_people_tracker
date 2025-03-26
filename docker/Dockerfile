@@ -50,59 +50,24 @@ RUN sudo apt update && sudo apt install -y python3-pip
 # RUN pip3 install torch torchvision
 
 # Git Setup
-# ARG GIT_USERNAME
-# ARG GIT_USER_EMAIL
-# ARG GIT_TOKEN
-# RUN git config --global user.name ${GIT_USERNAME} && git config --global user.email ${GIT_USER_EMAIL}
-# # Installing repository and pip dependencies
-# RUN cd && mkdir -p $HOME/ros2_ws/src && cd $HOME/ros2_ws/src git clone https://${GIT_TOKEN}@github.com/morpheus1820/2d_lidar_people_tracker
-# RUN pip3 install -r 2d_lidar_people_tracker/requirements.txt
-# RUN cd $HOME/ros2_ws && colcon build && source install/setup.bash
-# 
-# # Manually install requirements - we don't need all the requirements
-# RUN sudo apt update && sudo apt install python3-opencv python3-shapely -y
-# RUN pip3 install hydra-core gdown openai-clip torch torchvision h5py timm pyvisgraph pytorch_lightning
-# #shapely serve ma da problemi con numpy -> installato con apt?
-# RUN echo "export PYTHONPATH=$PYTHONPATH:/home/${USER}/visual-language-navigation" >> /home/${USER}/.bashrc
-# RUN pip3 install matplotlib "numpy == 1.21.5"
-# RUN pip3 install open3d "numpy == 1.21.5"
-# 
-# ENV PYTHONPATH=$"${PYTHONPATH}:/home/${USER}/visual-language-navigation"
-# RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> /home/${USER}/.bashrc
-# 
-# # Clip backbone
-# RUN wget https://openaipublic.azureedge.net/clip/models/40d365715913c9da98579312b702a82c18be219cc2a73407c4526f58eba950af/ViT-B-32.pt && \
-#     mkdir ~/.cache/clip && mv ViT-B-32.pt ~/.cache/clip/ViT-B-32.pt
-# 
+ARG GIT_USERNAME
+ARG GIT_USER_EMAIL
+ARG GIT_TOKEN
+RUN git config --global user.name ${GIT_USERNAME} && git config --global user.email ${GIT_USER_EMAIL}
+# Installing repository and pip dependencies
+RUN cd && mkdir -p $HOME/ros2_ws/src && cd $HOME/ros2_ws/src git clone https://${GIT_TOKEN}@github.com/morpheus1820/2d_lidar_people_tracker
+RUN pip3 install -r 2d_lidar_people_tracker/requirements.txt
+RUN cd $HOME/ros2_ws && colcon build && source install/setup.bash
+
 # # Update repo
 # SHELL ["/bin/bash", "-c"]
 # # For recompiling docker here
-# 
-# RUN cd && cd
-# RUN cd visual-language-navigation && git pull && cd vlmaps/lseg && mkdir checkpoints && cd && \
-#     cd visual-language-navigation/ros2_vlmaps_interfaces && source /opt/ros/${ROS_DISTRO}/setup.bash && colcon build --symlink-install --cmake-args -DCMAKE_CXX_FLAGS=-w && \
-#     echo "source /home/${USER}/visual-language-navigation/ros2_vlmaps_interfaces/install/local_setup.bash" >> /home/${USER}/.bashrc
-# # Set checkpoints
-# COPY ./demo_e200.ckpt /home/${USER}/visual-language-navigation/vlmaps/lseg/checkpoints/demo_e200.ckpt
-# # Hugging Face Model
-# COPY ./download_hf_model.py /home/${USER}/download_hf_model.py
-# RUN python3 download_hf_model.py
-# 
-# RUN pip install transformers openai
-# RUN mkdir ~/.cache/huggingface/transformers && \
-#     cd ~/.cache/huggingface/transformers && \
-#     wget https://huggingface.co/openai/clip-vit-base-patch32/resolve/main/pytorch_model.bin && \
-#     wget https://huggingface.co/openai/clip-vit-base-patch32/resolve/main/tokenizer_config.json && \
-#     wget https://huggingface.co/openai/clip-vit-base-patch32/resolve/main/vocab.json && \
-#     wget https://huggingface.co/openai/clip-vit-base-patch32/resolve/main/merges.txt && \
-#     wget https://huggingface.co/openai/clip-vit-base-patch32/resolve/main/special_tokens_map.json && \
-#     wget https://huggingface.co/openai/clip-vit-base-patch32/resolve/main/tokenizer.json && \
-#     wget https://huggingface.co/openai/clip-vit-base-patch32/resolve/main/special_tokens_map.json
 
+RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> /home/${USER}/.bashrc
 RUN echo "source /home/user1/ros2_ws/install/setup.bash" >> /home/${USER}/.bashrc
 RUN echo "export ROS_DOMAIN_ID=0" >> /home/${USER}/.bashrc
 
 # Cleanup
-RUN sudo apt update && sudo apt install -y iproute2 unzip terminator bash-completion gedit mlocate && sudo apt clean && sudo rm -rf /var/lib/apt/lists/* && sudo updatedb
+RUN sudo apt update && sudo apt install -y iproute2 unzip terminator bash-completion micro mlocate && sudo apt clean && sudo rm -rf /var/lib/apt/lists/* && sudo updatedb
 
 CMD ["bash", "-c", ". generate_cyclone_config.sh"]
