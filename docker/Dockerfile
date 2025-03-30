@@ -1,4 +1,4 @@
-FROM nvidia/cuda:12.1.0-devel-ubuntu22.04
+FROM nvidia/cuda:12.8.1-devel-ubuntu24.04
 
 ARG RELEASE
 ARG LAUNCHPAD_BUILD_ARCH
@@ -24,7 +24,7 @@ WORKDIR /home/${USER}
 RUN sudo apt update && DEBIAN_FRONTEND=noninteractive sudo apt install ffmpeg libsm6 libxext6 -y
 
 # ROS2 Install
-ENV ROS_DISTRO=iron
+ENV ROS_DISTRO=jazzy
 RUN sudo apt update && sudo apt install -y locales && sudo locale-gen en_US en_US.UTF-8 \
     && sudo update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 \
     && export LANG=en_US.UTF-8
@@ -46,21 +46,22 @@ ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> /home/${USER}/.bashrc
 
 # Install pip and system dependencies
-RUN sudo apt update && sudo apt install -y python3-pip
-RUN pip3 install torch torchvision
-RUN pip3 install numpy==1.21.5 scipy==1.10 numpy-quaternion==2023 pandas==2.0 numba==0.57 matplotlib==3.5 seaborn==0.13 contourpy==1.2 pip setuptools==68
+RUN sudo apt update && sudo apt install -y python3-pip python3.12-venv
+RUN cd && python3 -m venv venv
+RUN cd && . venv/bin/activate && pip3 install torch
+RUN pip3 install numpy==1.26.4
 
 RUN cd && mkdir -p $HOME/ros2_ws/src 
 
-# Git Setup
-ARG GIT_USERNAME
-ARG GIT_USER_EMAIL
-ARG GIT_TOKEN
-RUN git config --global user.name ${GIT_USERNAME} && git config --global user.email ${GIT_USER_EMAIL}
-# Installing repository and pip dependencies
-RUN cd && mkdir -p $HOME/ros2_ws/src && cd $HOME/ros2_ws/src git clone https://${GIT_TOKEN}@github.com/morpheus1820/2d_lidar_people_tracker
-RUN pip3 install -r 2d_lidar_people_tracker/requirements.txt
-RUN cd $HOME/ros2_ws && colcon build && source install/setup.bash
+# # Git Setup
+# ARG GIT_USERNAME
+# ARG GIT_USER_EMAIL
+# ARG GIT_TOKEN
+# RUN git config --global user.name ${GIT_USERNAME} && git config --global user.email ${GIT_USER_EMAIL}
+# # Installing repository and pip dependencies
+# RUN cd && mkdir -p $HOME/ros2_ws/src && cd $HOME/ros2_ws/src git clone https://${GIT_TOKEN}@github.com/morpheus1820/2d_lidar_people_tracker
+# RUN pip3 install -r 2d_lidar_people_tracker/requirements.txt
+# RUN cd $HOME/ros2_ws && colcon build && source install/setup.bash
 
 # # Update repo
 # SHELL ["/bin/bash", "-c"]
@@ -71,6 +72,6 @@ RUN echo "source /home/user1/ros2_ws/install/setup.bash" >> /home/${USER}/.bashr
 RUN echo "export ROS_DOMAIN_ID=0" >> /home/${USER}/.bashrc
 
 # Cleanup
-RUN sudo apt update && sudo apt install -y iproute2 unzip terminator bash-completion micro mlocate && sudo apt clean && sudo rm -rf /var/lib/apt/lists/* && sudo updatedb
+RUN sudo apt update && sudo apt install -y iproute2 unzip bash-completion micro && sudo apt clean && sudo rm -rf /var/lib/apt/lists/*
 
 CMD ["bash", "-c", ". generate_cyclone_config.sh"]
