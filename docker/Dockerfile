@@ -54,14 +54,14 @@ RUN pip3 install numpy==1.26.4
 RUN cd && mkdir -p $HOME/ros2_ws/src 
 
 # # Git Setup
-# ARG GIT_USERNAME
-# ARG GIT_USER_EMAIL
-# ARG GIT_TOKEN
-# RUN git config --global user.name ${GIT_USERNAME} && git config --global user.email ${GIT_USER_EMAIL}
-# # Installing repository and pip dependencies
-# RUN cd && mkdir -p $HOME/ros2_ws/src && cd $HOME/ros2_ws/src git clone https://${GIT_TOKEN}@github.com/morpheus1820/2d_lidar_people_tracker
-# RUN pip3 install -r 2d_lidar_people_tracker/requirements.txt
-# RUN cd $HOME/ros2_ws && colcon build && source install/setup.bash
+ARG GIT_USERNAME
+ARG GIT_USER_EMAIL
+ARG GIT_TOKEN
+RUN git config --global user.name ${GIT_USERNAME} && git config --global user.email ${GIT_USER_EMAIL}
+# Installing repository and pip dependencies
+RUN cd && mkdir -p $HOME/ros2_ws/src && cd $HOME/ros2_ws/src git clone https://${GIT_TOKEN}@github.com/hsp-iit/2d_lidar_people_tracker
+RUN pip3 install -r 2d_lidar_people_tracker/requirements.txt
+RUN . venv/bin/activate && cd $HOME/ros2_ws && colcon build && source install/setup.bash
 
 # # Update repo
 # SHELL ["/bin/bash", "-c"]
