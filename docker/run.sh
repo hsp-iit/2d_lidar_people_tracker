@@ -2,8 +2,8 @@
 NAME=convince_people_detector
 TAG=latest
 
-sudo xhost +
-sudo docker run \
+xhost +
+docker run \
      --network=host --privileged \
      -it \
      --rm \
