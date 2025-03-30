@@ -47,7 +47,8 @@ RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> /home/${USER}/.bashrc
 
 # Install pip and system dependencies
 RUN sudo apt update && sudo apt install -y python3-pip
-# RUN pip3 install torch torchvision
+RUN pip3 install torch torchvision
+RUN pip3 install numpy==1.21.5 scipy==1.10 numpy-quaternion==2023 pandas==2.0 numba==0.57 matplotlib==3.5 contourpy==1.2
 
 # Git Setup
 ARG GIT_USERNAME
