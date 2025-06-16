@@ -11,7 +11,7 @@ cd $HOME/ros2_ws
 colcon build && source install/setup.bash
 ```
 ## Docker
-Build the docker image: `cd docker && build_docker.sh GIT_USERNAME GIT_USER_EMAIL GIT_TOKEN`
+Build the docker image: `cd docker && ./build_docker.sh GIT_USERNAME GIT_USER_EMAIL GIT_TOKEN`
 
 Run the image: `docker/run.sh`
 
