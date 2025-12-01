@@ -26,7 +26,7 @@ RUN sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.ke
 RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
 RUN sudo apt update && DEBIAN_FRONTEND=noninteractive sudo apt install ros-$ROS_DISTRO-ros-base \
     ros-$ROS_DISTRO-sensor-msgs ros-$ROS_DISTRO-geometry-msgs \
-    ros-$ROS_DISTRO-cv-bridge ros-$ROS_DISTRO-nav2-common ros-dev-tools ros-$ROS_DISTRO-rmw-cyclonedds-cpp python3-pip python3.12-venv -y
+    ros-$ROS_DISTRO-cv-bridge ros-$ROS_DISTRO-nav2-common ros-dev-tools ros-$ROS_DISTRO-rmw-cyclonedds-cpp python3-pip python3.12-venv micro tmux -y
 ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> /home/${USER}/.bashrc
 
@@ -34,11 +34,11 @@ RUN sudo apt clean
 
 # Install pip and system dependencies
 RUN cd && mkdir -p $HOME/ros2_ws/src && cd $HOME/ros2_ws/src && git clone https://github.com/hsp-iit/2d_lidar_people_tracker
-RUN sudo apt update && cd && python3 -m venv venv && . venv/bin/activate && pip3 install torch && pip3 install numpy==1.26.4 colcon-common-extensions && cd $HOME/ros2_ws/src/2d_lidar_people_tracker/people_detector/scripts && pip3 install -r requirements.txt
-RUN pip3 cache purge
+RUN cd $HOME && python3 -m venv venv && . $HOME/venv/bin/activate && pip install torch && pip install numpy==1.26.4 colcon-common-extensions
+RUN cd $HOME/ros2_ws/src/2d_lidar_people_tracker && . $HOME/venv/bin/activate && pip install -r requirements.txt && pip cache purge
 
 # Installing repository
-RUN . venv/bin/activate && cd $HOME/ros2_ws && colcon build && source install/setup.bash
+RUN . $HOME/venv/bin/activate && cd $HOME/ros2_ws && colcon build && sh install/setup.bash
 
 # # Update repo
 # SHELL ["/bin/bash", "-c"]

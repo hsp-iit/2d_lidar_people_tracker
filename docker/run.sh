@@ -1,6 +1,6 @@
 #!/bin/bash
 NAME=convince_people_detector
-TAG=jazzy
+TAG=jazzy-devel
 
 xhost +
 docker run \

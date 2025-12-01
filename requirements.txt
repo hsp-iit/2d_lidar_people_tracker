@@ -7,3 +7,5 @@ stonesoup
 seaborn
 scikit-learn
 numpy-quaternion
+opencv-python
+ultralytics
