@@ -32,7 +32,6 @@ def generate_launch_description():
         executable = 'detect_following'
     )
 
-    ld.add_action(dr_spaam_local)
     ld.add_action(dr_spaam_remote)
     ld.add_action(yolo)
     ld.add_action(tracker)
