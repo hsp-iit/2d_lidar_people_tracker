@@ -9,10 +9,10 @@ from launch_ros.actions import Node
 def generate_launch_description():
     ld = LaunchDescription()
     
-    dr_spaam_remote = IncludeLaunchDescription(
+    dr_spaam_local = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([os.path.join(
             get_package_share_directory('detectors_ros'), 'launch'),
-            '/dr_spaam_ros_remote.launch.py'])
+            '/dr_spaam_ros_local.launch.py'])
     )
 
     yolo = IncludeLaunchDescription(
@@ -32,7 +32,7 @@ def generate_launch_description():
         executable = 'detect_following'
     )
 
-    ld.add_action(dr_spaam_remote)
+    ld.add_action(dr_spaam_local)
     ld.add_action(yolo)
     ld.add_action(tracker)
     ld.add_action(detect_following)
