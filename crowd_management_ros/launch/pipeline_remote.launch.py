@@ -9,12 +9,6 @@ from launch_ros.actions import Node
 def generate_launch_description():
     ld = LaunchDescription()
     
-    dr_spaam_local = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([os.path.join(
-            get_package_share_directory('detectors_ros'), 'launch'),
-            '/dr_spaam_ros_local.launch.py']) 
-    )
-
     dr_spaam_remote = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([os.path.join(
             get_package_share_directory('detectors_ros'), 'launch'),
